@@ -1,0 +1,9 @@
+{
+  "db": {
+    "uri": "mongodb://localhost:27017/nails_project"
+  },
+  "server": {
+    "host": "localhost",
+    "port": "3505"
+  }
+}

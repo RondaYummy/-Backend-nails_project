@@ -1,0 +1,12 @@
+{
+  "verbose": false,
+  "watch": [
+    "src",
+    "config",
+    "nodemon.json"
+  ],
+  "ext": "js,json",
+  "env": {
+    "NODE_ENV": "development"
+  }
+}
