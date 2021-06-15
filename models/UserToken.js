@@ -9,6 +9,10 @@ const UserToken = new Schema({
     required: true,
     unique: true
   },
+  token: {
+    type: String,
+    required: true
+  },
   refreshToken: {
     type: String,
     required: true
