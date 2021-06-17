@@ -39,10 +39,24 @@ const UserSchema = new Schema({
 
 const UserModel = model('UserModel', UserSchema);
 
+
+const Client = UserModel.discriminator('Client',
+  new Schema({
+      appointments: [{
+        type: Date
+      }], // ????????????????????????????????????
+      reviews: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Reviews' // Реалізую нову модель відгуків, може тре буде відобразити останні відгуки на головній чи ше шось....
+      }]
+    },
+    options));
+
 const Master = UserModel.discriminator('Master',
   new Schema({
       reviews: [{
-        type: String
+        type: Schema.Types.ObjectId,
+        ref: 'Reviews'
       }],
       photoWorks: [{
         type: String
@@ -54,11 +68,13 @@ const Admin = UserModel.discriminator('Admin',
   new Schema({
       // Обєкт з даними про салони, які закріплені за цим адміном
       salons: [{
-        type: Object
+        type: Schema.Types.ObjectId,
+        ref: 'Salon'
       }],
       // Обєкт з даними про майстрів, які закріплені за салонами цього адміна
       masters: [{
-        type: Object
+        type: Schema.Types.ObjectId,
+        ref: 'Master'
       }]
     },
     options));
@@ -67,15 +83,18 @@ const Global = UserModel.discriminator('Global',
   new Schema({
       // Обєкт з даними про салони, які створив цей global
       salons: [{
-        type: Object
+        type: Schema.Types.ObjectId,
+        ref: 'Salon'
       }],
       // Обєкт з даними про admin, яких створив цей global
       admins: [{
-        type: Object
+        type: Schema.Types.ObjectId,
+        ref: 'Admin'
       }],
       // Закблоковані користувачі цим global
       blocked: [{
         type: Schema.Types.ObjectId,
+        ref: 'Client'
       }]
     },
     options));
