@@ -57,7 +57,7 @@ const UserSchema = new Schema({
   },
 }, options);
 
-UserSchema.virtual('fullName').get(function () {
+UserSchema.virtual('fullName').get(function getFullName() {
   return `${this.lastName} ${this.firstName} ${this.middleName || ''}`.trim();
 });
 
