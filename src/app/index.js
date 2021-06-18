@@ -35,7 +35,7 @@ module.exports = (host, port) => new Promise((res, rej) => {
   });
 
   app.use(expressJWT({
-    secret: process.env.SECRET_KEY, // new
+    secret: process.env.SECRET_KEY, // new works?
     algorithms: ['HS256'],
     credentialsRequired: false,
     getToken: function fromHeaderOrQuerystring(req) {
