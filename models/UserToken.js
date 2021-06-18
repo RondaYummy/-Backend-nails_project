@@ -21,4 +21,5 @@ const UserToken = new Schema({
     required: true,
   },
 }, options);
+
 module.exports = model('UserToken', UserToken);
