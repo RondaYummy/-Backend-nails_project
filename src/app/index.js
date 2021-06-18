@@ -1,7 +1,7 @@
 const express = require('express');
 require('express-async-errors');
 
-// const isStarted = false;
+let isStarted = false;
 
 /**
  * @param {String} host
@@ -29,6 +29,6 @@ module.exports = (host, port) => new Promise((res, rej) => {
     }
 
     console.log(`Listening server on ${host}:${port}`);
-    return res(app);
+    res(app);
   });
 });
