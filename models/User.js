@@ -6,6 +6,10 @@ const {
 const options = {
   discriminatorKey: 'role',
   timestamps: true,
+  virtuals: {
+    toObject: true,
+    toJSON: true,
+  },
 };
 
 const UserSchema = new Schema({
@@ -50,6 +54,10 @@ const UserSchema = new Schema({
     default: 'client',
   },
 }, options);
+
+UserSchema.virtual('fullName').get(function () {
+  return `${this.lastName} ${this.firstName} ${this.middleName || ''}`.trim();
+});
 
 const User = model('User', UserSchema);
 
