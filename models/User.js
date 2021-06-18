@@ -7,6 +7,7 @@ const options = {
   discriminatorKey: 'role',
   timestamps: true,
 };
+
 const UserSchema = new Schema({
   email: {
     type: String,
@@ -43,13 +44,14 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false
   },
-  promoCodes: [{
-    type: Schema.Types.ObjectId,
-    ref: 'PromoCodes', // todo Реалізую нову модель PromoCodes, заборонено адміну використовувати свої ж створенні промо коди
-  }],
+  // promoCodes: [{
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'PromoCodes', // todo Реалізую нову модель PromoCodes, заборонено адміну використовувати свої ж створенні промо коди
+  // }],
   role: {
     type: String,
-    enum: ['admin', 'master', 'client', 'global'],
+    enum: ['admin', 'master', 'client', 'globalAdmin'],
+    default: 'client'
     /* admin - Адмініструє закріплений за ним салон ( Начальнік ).
       master - працівник який є закріплений за салоном, яким може керувати Admin
       client - не закріплена нізаким особа, має примітивні права.
@@ -68,10 +70,6 @@ const MasterUser = User.discriminator('Master',
     salon: [{
       type: Schema.Types.ObjectId,
       ref: 'Salon',
-    }],
-    services: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Salon', // Створенити модель послуг, які надає майстер в салоні
     }],
     certificates: {
       type: [{
@@ -92,29 +90,8 @@ const AdminUser = User.discriminator('Admin',
   },
   options));
 
-const GlobalUser = User.discriminator('Global',
-  new Schema({
-    // Обєкт з даними про салони, які створив цей global
-    salons: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Salon',
-    }],
-    // Обєкт з даними про admin, яких створив цей global
-    admins: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Admin',
-    }],
-    // Закблоковані користувачі цим global
-    blocked: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Client',
-    }],
-  },
-  options));
-
 module.exports = {
   User,
   MasterUser,
   AdminUser,
-  GlobalUser,
 };
