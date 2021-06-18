@@ -4,7 +4,6 @@ const {
 } = require('mongoose');
 
 const options = {
-  discriminatorKey: 'role',
   timestamps: true,
 };
 
