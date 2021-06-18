@@ -75,3 +75,6 @@ sw.*
 
 # Vim swap files
 *.swp
+
+config/*
+!config/default.json
