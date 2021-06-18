@@ -40,18 +40,19 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  isDeleted:{
+  isDeleted: {
     type: Boolean,
-    default: false
+    default: false,
   },
   // promoCodes: [{
   //   type: Schema.Types.ObjectId,
-  //   ref: 'PromoCodes', // todo Реалізую нову модель PromoCodes, заборонено адміну використовувати свої ж створенні промо коди
+  //   ref: 'PromoCodes', // todo Реалізую нову модель PromoCodes, заборонено 
+  // адміну використовувати свої ж створенні промо коди
   // }],
   role: {
     type: String,
     enum: ['admin', 'master', 'client', 'globalAdmin'],
-    default: 'client'
+    default: 'client',
     /* admin - Адмініструє закріплений за ним салон ( Начальнік ).
       master - працівник який є закріплений за салоном, яким може керувати Admin
       client - не закріплена нізаким особа, має примітивні права.
