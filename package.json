@@ -4,7 +4,7 @@
   "description": "API for Nails Project",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./index.js --config ./nodemon.json",
+    "dev": "eslint . --ext .js --ignore-path .gitignore && nodemon ./index.js --config ./nodemon.json",
     "start": "node index.js",
     "lint": "eslint . --ext .js --ignore-path .gitignore",
     "lint:fix": "eslint . --ext .js --ignore-path .gitignore --fix "
