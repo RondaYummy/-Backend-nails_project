@@ -24,8 +24,4 @@ const SalonSchema = new Schema({
   }],
 }, options);
 
-const Salon = model('Salon', SalonSchema);
-
-module.exports = {
-  Salon,
-};
+module.exports = model('Salon', SalonSchema);

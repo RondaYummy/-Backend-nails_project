@@ -44,20 +44,10 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  // promoCodes: [{
-  //   type: Schema.Types.ObjectId,
-  //   ref: 'PromoCodes', // todo Реалізую нову модель PromoCodes, заборонено 
-  // адміну використовувати свої ж створенні промо коди
-  // }],
   role: {
     type: String,
     enum: ['admin', 'master', 'client', 'globalAdmin'],
     default: 'client',
-    /* admin - Адмініструє закріплений за ним салон ( Начальнік ).
-      master - працівник який є закріплений за салоном, яким може керувати Admin
-      client - не закріплена нізаким особа, має примітивні права.
-      global - адміністратор всього сайту, може створювати салони і закріплювати за ними адмінів.
-    */
   },
 }, options);
 
@@ -74,7 +64,7 @@ const MasterUser = User.discriminator('Master',
     }],
     certificates: {
       type: [{
-        type: String, // Фотографії сертифікатів майстра, якщо вони є?
+        type: String, // Фотографії сертифікатів майстра, якщо вони є.
       }],
     },
   },
@@ -87,12 +77,11 @@ const AdminUser = User.discriminator('Admin',
       type: Schema.Types.ObjectId,
       ref: 'Salon',
     }],
-    // Обєкт з даними про майстрів, які закріплені за салонами цього адміна
   },
   options));
 
-module.exports = {
-  User,
-  MasterUser,
-  AdminUser,
-};
+User.MasterUser = MasterUser;
+User.AdminUser = AdminUser;
+User.User = User;
+
+module.exports = User;
