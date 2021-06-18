@@ -3,6 +3,10 @@ const {
   model,
 } = require('mongoose');
 
+const options = {
+  timestamps: true,
+};
+
 const UserToken = new Schema({
   user: {
     type: Schema.Types.ObjectId,
@@ -16,5 +20,5 @@ const UserToken = new Schema({
     type: String,
     required: true,
   },
-});
+}, options);
 module.exports = model('UserToken', UserToken);
