@@ -18,27 +18,27 @@ const updateTokens = (userId) => {
       refreshToken: refreshToken.token,
     }));
 };
-const signIn = (req, res) => {
+
+const signIn = async (req, res) => {
   const { email, password } = req.body;
+  const user = await User.findOne({ email }).exec();
 
-  User.findOne({ email })
-    .exec()
-    .then((user) => {
-      if (!user) {
-        res.status(401).json({ message: 'User does not exist!' });
-      }
+  if (!user) {
+    res.status(401).json({ message: 'User does not exist!' });
+    return;
+  }
 
-      const isValid = bcrypt.compareSync(password, user.password);
-
-      // Якщо все добре і пароль підійшов видаю токен
-      if (isValid) {
-        updateTokens(user._id)
-          .then((tokens) => res.json(tokens));
-      }
-    });
+  const isValid = await bcrypt.compareSync(password, user.password);
+  // Якщо все добре і пароль підійшов видаю токен
+  if (isValid) {
+    const updatedToken = await updateTokens(user._id);
+    if (updatedToken) {
+      res.json(updatedToken);
+    }
+  }
 };
 
-const refreshTokens = (req, res) => {
+const refreshTokens = async (req, res) => {
   const {
     refreshToken,
   } = req.body;
@@ -57,16 +57,17 @@ const refreshTokens = (req, res) => {
       res.status(400).json({ message: 'invalid token!' });
     }
 
-    UserToken.findOne({ user: payload.id }).exec()
-      .then((token) => {
-        if (token === null) {
-          throw new Error('Invalid token!');
-        }
-        // token.userId ?
-        return updateTokens(token.userId);
-      })
-      .then((tokens) => res.json(tokens))
-      .catch((err) => res.status(400).json({ message: err.message }));
+    const token = await UserToken.findOne({ user: payload.id }).exec();
+    if (token === null) {
+      throw new Error('Invalid token!');
+    }
+    try {
+      // token.userId ?
+      const updatedTokens = await updateTokens(token.userId);
+      res.json(updatedTokens);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
   }
 };
 
