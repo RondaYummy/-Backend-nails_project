@@ -8,6 +8,7 @@ const {
 const UserToken = require('../src/models/UserToken');
 const User = require('../src/models/User');
 
+// Функція обновлення токенів
 const updateTokens = (userId) => {
   const accessToken = authhelper.generateAccesToken(userId);
   const refreshToken = authhelper.generateRefreshToken();
@@ -46,6 +47,7 @@ const refreshTokens = async (req, res) => {
   try {
     payload = jwt.verify(refreshToken, secret);
 
+    // Провіряю чи це дійсно рефреш токен
     if (payload.type !== 'refresh') {
       res.status(400).json({ message: 'Invalid token!' });
       return;
@@ -53,21 +55,22 @@ const refreshTokens = async (req, res) => {
   } catch (e) {
     if (e instanceof jwt.TokenExpiredError) {
       res.status(400).json({ message: 'Token experied!' });
-    } else if (e instanceof jwt.JsonWebTokenError) {
+      return;
+    } if (e instanceof jwt.JsonWebTokenError) {
       res.status(400).json({ message: 'invalid token!' });
+      return;
     }
-
-    const token = await UserToken.findOne({ user: payload.id }).exec();
-    if (token === null) {
-      throw new Error('Invalid token!');
-    }
-    try {
-      // token.userId ?
-      const updatedTokens = await updateTokens(token.userId);
-      res.json(updatedTokens);
-    } catch (err) {
-      res.status(400).json({ message: err.message });
-    }
+  }
+  const token = await UserToken.findOne({ tokenId: payload.id }).exec();
+  if (token === null) {
+    throw new Error('Invalid token!');
+  }
+  try {
+    // token.userId ?
+    const updatedTokens = await updateTokens(token.userId);
+    res.json(updatedTokens);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
 };
 

@@ -20,6 +20,7 @@ const generateAccesToken = (userId) => {
 };
 
 const generateRefreshToken = (id) => {
+  // id токена
   const payload = {
     id,
     type: tokens.refresh.type,
@@ -36,7 +37,9 @@ const generateRefreshToken = (id) => {
 };
 
 const replaceDbRefreshToken = async (tokenId, userId) => {
+  // Шукаю токен по юзер айді?
   await UserToken.findOneAndRemove({ userId }).exec();
+  // Створюю новий
   await UserToken.create({ tokenId, userId });
 };
 
