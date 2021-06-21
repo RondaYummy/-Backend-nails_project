@@ -2,6 +2,7 @@ const express = require('express');
 require('express-async-errors');
 const expressJWT = require('express-jwt');
 const config = require('../../config/development.json');
+const routes = require('../routes/routes');
 
 /**
  * @param {String} host
@@ -17,6 +18,7 @@ module.exports = (host, port) => new Promise((res, rej) => {
     index: false,
     fallthrough: false,
   }));
+  app.use('/api', routes);
 
   app.use(express.json());
   app.use(express.urlencoded({

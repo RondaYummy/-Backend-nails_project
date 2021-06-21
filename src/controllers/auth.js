@@ -87,7 +87,6 @@ const signUp = async (req, res) => {
       phone,
       role,
     } = await req.body;
-
     const currentUser = await models.User.findOne({
       email,
     });
@@ -119,6 +118,7 @@ const signUp = async (req, res) => {
       user,
     });
   } catch (e) {
+    console.log(e);
     return res.status(500).json({
       message: 'Something went wrong.',
     });
