@@ -1,12 +1,11 @@
 const jwt = require('jsonwebtoken');
 
 const bcrypt = require('bcryptjs');
-const authhelper = require('../src/utils/authHelper');
+const authhelper = require('../utils/authHelper');
 const {
   secret,
-} = require('../config/development.json').jwt;
-const UserToken = require('../src/models/UserToken');
-const User = require('../src/models/User');
+} = require('../../config/development.json').jwt;
+const models = require('../models/index');
 
 // Функція обновлення токенів
 const updateTokens = (userId) => {
@@ -22,7 +21,7 @@ const updateTokens = (userId) => {
 
 const signIn = async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email }).exec();
+  const user = await models.User.findOne({ email }).exec();
 
   if (!user) {
     res.status(401).json({ message: 'User does not exist!' });
@@ -30,7 +29,7 @@ const signIn = async (req, res) => {
   }
 
   const isValid = await bcrypt.compareSync(password, user.password);
-  // Якщо все добре і пароль підійшов видаю токен
+
   if (isValid) {
     const updatedToken = await updateTokens(user._id);
     if (updatedToken) {
@@ -61,7 +60,7 @@ const refreshTokens = async (req, res) => {
       return;
     }
   }
-  const token = await UserToken.findOne({ tokenId: payload.id }).exec();
+  const token = await models.UserToken.findOne({ tokenId: payload.id }).exec();
   if (token === null) {
     throw new Error('Invalid token!');
   }
@@ -74,7 +73,60 @@ const refreshTokens = async (req, res) => {
   }
 };
 
+const signUp = async (req, res) => {
+  try {
+    // Валідацію провіряти!!!
+    const {
+      email,
+      password,
+      firstName,
+      lastName,
+      middleName,
+      gender,
+      age,
+      phone,
+      role,
+    } = await req.body;
+
+    const currentUser = await models.User.findOne({
+      email,
+    });
+
+    if (currentUser) {
+      return res.status(400).json({
+        message: 'A user with this name already exists. Use a different name.',
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const user = new models.User({
+      email,
+      password: hashedPassword,
+      firstName,
+      lastName,
+      middleName,
+      gender,
+      age,
+      phone,
+      role,
+    });
+
+    await user.save();
+
+    // Не відправляти пароль.
+    return res.status(201).json({
+      message: 'The user has been successfully created.',
+      user,
+    });
+  } catch (e) {
+    return res.status(500).json({
+      message: 'Something went wrong.',
+    });
+  }
+};
+
 module.exports = {
   signIn,
   refreshTokens,
+  signUp,
 };
