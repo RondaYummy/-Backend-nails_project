@@ -27,7 +27,8 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "mongoose": "^5.12.13",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
