@@ -33,6 +33,7 @@ const signIn = async (req, res) => {
 
   if (isValid) {
     const updatedToken = await updateTokens(user._id);
+    console.log('updatedToken', updatedToken);
     if (updatedToken) {
       res.json(updatedToken);
     }

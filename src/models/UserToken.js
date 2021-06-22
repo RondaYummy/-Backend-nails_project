@@ -14,11 +14,11 @@ const UserToken = new Schema({
   },
   token: {
     type: String,
-    required: true,
+    // required: true,
   },
   refreshToken: {
     type: String,
-    required: true,
+    // required: true,
   },
 }, options);
 
