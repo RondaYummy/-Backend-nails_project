@@ -6,7 +6,11 @@ const router = Router();
 
 const controllers = require('../controllers/index');
 
-router.post('/login', controllers.auth.signIn);
+// Auth
+router.post('/signin', controllers.auth.signIn);
+router.post('/refresh-tokens', controllers.auth.refreshTokens);
+
+// Registration
 router.post('/registration', controllers.auth.signUp);
 
 module.exports = router;

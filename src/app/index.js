@@ -18,7 +18,6 @@ module.exports = (host, port) => new Promise((res, rej) => {
     index: false,
     fallthrough: false,
   }));
-  app.use('/api', routes);
 
   app.use(express.json());
   app.use(express.urlencoded({
@@ -50,4 +49,20 @@ module.exports = (host, port) => new Promise((res, rej) => {
       return null;
     },
   }));
+  app.use('/api', routes);
+  // app.use((req, resp, next) => {
+  //   if (req.user) {
+  //     return next();
+  //   }
+
+  //   if (['/api/login', '/api/register'].some((v) => req.url.includes(v))
+  //      || !req.url.includes('/api/')
+  //   ) {
+  //     return next();
+  //   }
+
+  //   return resp.status(401).json({
+  //     message: 'Заборонено вхід!!!',
+  //   });
+  // });
 });

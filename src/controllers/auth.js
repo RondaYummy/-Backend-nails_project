@@ -7,11 +7,12 @@ const {
 } = require('../../config/development.json').jwt;
 const models = require('../models/index');
 
-// Функція обновлення токенів
+// FUNCTION UPDATE TOKENS
 const updateTokens = (userId) => {
   const accessToken = authhelper.generateAccesToken(userId);
   const refreshToken = authhelper.generateRefreshToken();
-
+  // Все гуд, токени є, помилка в коді нижче
+  // в authhelper методи провірені і виконують свою роботу (replaceDbRefreshToken ????)
   return authhelper.replaceDbRefreshToken(refreshToken.id, userId)
     .then(() => ({
       accessToken,
@@ -45,8 +46,7 @@ const refreshTokens = async (req, res) => {
   let payload;
   try {
     payload = jwt.verify(refreshToken, secret);
-
-    // Провіряю чи це дійсно рефреш токен
+    // ITS REALY REFRESH TOKEN???
     if (payload.type !== 'refresh') {
       res.status(400).json({ message: 'Invalid token!' });
       return;
