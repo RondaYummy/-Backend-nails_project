@@ -38,9 +38,7 @@ const generateRefreshToken = () => {
 };
 
 const replaceDbRefreshToken = async (tokenId, userId) => {
-  // Шукаю токен по юзер айді?
   await UserToken.findOneAndRemove({ user: userId }).exec();
-  // Створюю новий
   const gg = await UserToken.create({ tokenId, user: userId });
   console.log('dfdf', gg);
 };

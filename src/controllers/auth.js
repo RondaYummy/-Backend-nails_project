@@ -21,7 +21,6 @@ const updateTokens = (userId) => {
 const signIn = async (req, res) => {
   const { email, password } = req.body;
   const user = await models.User.findOne({ email }).exec();
-
   if (!user) {
     res.status(401).json({ message: 'User does not exist!' });
     return;
@@ -45,7 +44,6 @@ const refreshTokens = async (req, res) => {
   let payload;
   try {
     payload = jwt.verify(refreshToken, secret);
-    // ITS REALY REFRESH TOKEN???
     if (payload.type !== 'refresh') {
       res.status(400).json({ message: 'Invalid token!' });
       return;
@@ -65,7 +63,6 @@ const refreshTokens = async (req, res) => {
     throw new Error('Invalid token!');
   }
   try {
-    // token.userId ?
     const updatedTokens = await updateTokens(token.user);
 
     res.json(updatedTokens);
