@@ -41,7 +41,8 @@ const replaceDbRefreshToken = async (tokenId, userId) => {
   // Шукаю токен по юзер айді?
   await UserToken.findOneAndRemove({ userId }).exec();
   // Створюю новий
-  await UserToken.create({ tokenId, userId });
+  const gg = await UserToken.create({ tokenId, user: userId });
+  console.log('dfdf', gg);
 };
 
 module.exports = {

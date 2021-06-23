@@ -14,11 +14,14 @@ const UserToken = new Schema({
   },
   token: {
     type: String,
-    // required: true,
+    // required: true, // todo delete required works?
   },
   refreshToken: {
     type: String,
     // required: true,
+  },
+  tokenId: {
+    type: String,
   },
 }, options);
 

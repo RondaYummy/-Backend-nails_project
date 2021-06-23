@@ -11,8 +11,6 @@ const models = require('../models/index');
 const updateTokens = (userId) => {
   const accessToken = authhelper.generateAccesToken(userId);
   const refreshToken = authhelper.generateRefreshToken();
-  // Все гуд, токени є, помилка в коді нижче
-  // в authhelper методи провірені і виконують свою роботу (replaceDbRefreshToken ????)
   return authhelper.replaceDbRefreshToken(refreshToken.id, userId)
     .then(() => ({
       accessToken,
@@ -62,12 +60,14 @@ const refreshTokens = async (req, res) => {
     }
   }
   const token = await models.UserToken.findOne({ tokenId: payload.id }).exec();
+
   if (token === null) {
     throw new Error('Invalid token!');
   }
   try {
     // token.userId ?
-    const updatedTokens = await updateTokens(token.userId);
+    const updatedTokens = await updateTokens(token.user);
+
     res.json(updatedTokens);
   } catch (err) {
     res.status(400).json({ message: err.message });
