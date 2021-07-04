@@ -3,7 +3,6 @@ require('express-async-errors');
 const expressJWT = require('express-jwt');
 const config = require('../../config/development.json');
 const routes = require('../routes/routes');
-
 /**
  * @param {String} host
  * @param {String|Number}port

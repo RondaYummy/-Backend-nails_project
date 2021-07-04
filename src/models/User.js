@@ -50,6 +50,11 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  TermsOfServiceAndPrivacyPolicy: {
+    type: String,
+    enum: ['notAccept', 'confirmed'],
+    default: 'notAccept',
+  },
   role: {
     type: String,
     enum: ['admin', 'master', 'client', 'globalAdmin'],

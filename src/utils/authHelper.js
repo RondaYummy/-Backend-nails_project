@@ -40,7 +40,7 @@ const generateRefreshToken = () => {
 const replaceDbRefreshToken = async (tokenId, userId) => {
   await UserToken.findOneAndRemove({ user: userId }).exec();
   const gg = await UserToken.create({ tokenId, user: userId });
-  console.log('dfdf', gg);
+  console.log('replaceDbRefreshToken', gg);
 };
 
 module.exports = {

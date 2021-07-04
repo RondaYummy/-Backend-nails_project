@@ -20,6 +20,7 @@ const updateTokens = (userId) => {
 
 const signIn = async (req, res) => {
   const { email, password } = req.body;
+
   const user = await models.User.findOne({ email }).exec();
   if (!user) {
     res.status(401).json({ message: 'User does not exist!' });
