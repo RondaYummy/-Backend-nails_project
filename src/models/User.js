@@ -32,9 +32,6 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  middleName: {
-    type: String,
-  },
   gender: {
     type: String,
     enum: ['Male', 'Female'],
