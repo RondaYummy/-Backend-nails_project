@@ -19,11 +19,18 @@ const updateTokens = (userId) => {
 };
 
 const signIn = async (req, res) => {
-  const { email, password } = req.body;
+  const {
+    email,
+    password,
+  } = req.body;
 
-  const user = await models.User.findOne({ email }).exec();
+  const user = await models.User.findOne({
+    email,
+  }).exec();
   if (!user) {
-    res.status(401).json({ message: 'User does not exist!' });
+    res.status(401).json({
+      message: 'User does not exist!',
+    });
     return;
   }
 
@@ -46,19 +53,28 @@ const refreshTokens = async (req, res) => {
   try {
     payload = jwt.verify(refreshToken, secret);
     if (payload.type !== 'refresh') {
-      res.status(400).json({ message: 'Invalid token!' });
+      res.status(400).json({
+        message: 'Invalid token!',
+      });
       return;
     }
   } catch (e) {
     if (e instanceof jwt.TokenExpiredError) {
-      res.status(400).json({ message: 'Token experied!' });
+      res.status(400).json({
+        message: 'Token experied!',
+      });
       return;
-    } if (e instanceof jwt.JsonWebTokenError) {
-      res.status(400).json({ message: 'invalid token!' });
+    }
+    if (e instanceof jwt.JsonWebTokenError) {
+      res.status(400).json({
+        message: 'invalid token!',
+      });
       return;
     }
   }
-  const token = await models.UserToken.findOne({ tokenId: payload.id }).exec();
+  const token = await models.UserToken.findOne({
+    tokenId: payload.id,
+  }).exec();
 
   if (token === null) {
     throw new Error('Invalid token!');
@@ -68,7 +84,9 @@ const refreshTokens = async (req, res) => {
 
     res.json(updatedTokens);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({
+      message: err.message,
+    });
   }
 };
 
@@ -80,12 +98,13 @@ const signUp = async (req, res) => {
       password,
       firstName,
       lastName,
-      middleName,
       gender,
       age,
       phone,
       role,
+      TermsOfServiceAndPrivacyPolicy,
     } = await req.body;
+
     const currentUser = await models.User.findOne({
       email,
     });
@@ -102,13 +121,12 @@ const signUp = async (req, res) => {
       password: hashedPassword,
       firstName,
       lastName,
-      middleName,
       gender,
       age,
       phone,
       role,
+      TermsOfServiceAndPrivacyPolicy,
     });
-
     await user.save();
 
     // Не відправляти пароль.

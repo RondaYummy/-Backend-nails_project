@@ -37,7 +37,7 @@ const UserSchema = new Schema({
     enum: ['Male', 'Female'],
   },
   age: {
-    type: Number,
+    type: Date,
   },
   phone: {
     type: String,
@@ -48,9 +48,9 @@ const UserSchema = new Schema({
     default: false,
   },
   TermsOfServiceAndPrivacyPolicy: {
-    type: String,
-    enum: ['notAccept', 'confirmed'],
-    default: 'notAccept',
+    type: Boolean,
+    enum: ['true'],
+    required: true,
   },
   role: {
     type: String,

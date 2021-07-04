@@ -1,7 +1,8 @@
 const express = require('express');
 require('express-async-errors');
-const expressJWT = require('express-jwt');
-const config = require('../../config/development.json');
+// const expressJWT = require('express-jwt');
+// const config = require('../../config/development.json');
+const cors = require('cors');
 const routes = require('../routes/routes');
 /**
  * @param {String} host
@@ -22,7 +23,7 @@ module.exports = (host, port) => new Promise((res, rej) => {
   app.use(express.urlencoded({
     extended: true,
   }));
-
+  app.use(cors());
   app.listen(port, host, (err) => {
     if (err) {
       console.error(`Cannot start due to ${err.message}`);
@@ -34,20 +35,20 @@ module.exports = (host, port) => new Promise((res, rej) => {
     return res(app);
   });
 
-  app.use(expressJWT({
-    secret: config.jwt.secret,
-    algorithms: ['HS256'],
-    credentialsRequired: false,
-    getToken: function fromHeaderOrQuerystring(req) {
-      if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-        return req.headers.authorization.split(' ')[1];
-      }
-      if (req.query && req.query.token) {
-        return req.query.token;
-      }
-      return null;
-    },
-  }));
+  // app.use(expressJWT({
+  //   secret: config.jwt.secret,
+  //   algorithms: ['HS256'],
+  //   credentialsRequired: false,
+  //   getToken: function fromHeaderOrQuerystring(req) {
+  //     if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+  //       return req.headers.authorization.split(' ')[1];
+  //     }
+  //     if (req.query && req.query.token) {
+  //       return req.query.token;
+  //     }
+  //     return null;
+  //   },
+  // }));
   app.use('/api', routes);
   app.use((req, resp, next) => {
     if (req.user) {
