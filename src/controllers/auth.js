@@ -33,7 +33,6 @@ const signIn = async (req, res) => {
     });
     return;
   }
-
   const isValid = await bcrypt.compareSync(password, user.password);
 
   if (isValid) {
@@ -111,7 +110,7 @@ const signUp = async (req, res) => {
 
     if (currentUser) {
       return res.status(400).json({
-        message: 'A user with this name already exists. Use a different name.',
+        errors: 'A user with this name already exists. Use a different name.',
       });
     }
 

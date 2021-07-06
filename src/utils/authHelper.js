@@ -36,7 +36,6 @@ const generateRefreshToken = () => {
     token: jwt.sign(payload, secret, options),
   };
 };
-
 const replaceDbRefreshToken = async (tokenId, userId) => {
   await UserToken.findOneAndRemove({ user: userId }).exec();
   const gg = await UserToken.create({ tokenId, user: userId });
