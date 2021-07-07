@@ -40,10 +40,12 @@ const signIn = async (req, res) => {
   if (isValid) {
     const updatedToken = await updateTokens(user._id);
     console.log('updatedToken', updatedToken);
-
+    res.cookie('token', updatedToken, {
+      httpOnly: true,
+    });
     if (updatedToken) {
       res.json({
-        updatedToken,
+        // updatedToken,
         user,
       });
     }
