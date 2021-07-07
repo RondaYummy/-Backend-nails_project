@@ -20,4 +20,8 @@ router.post('/logout', controllers.logout.disconnect);
 // /api/registration
 router.post('/registration', controllers.auth.signUp);
 
+// Current User
+// api/user
+router.get('/user/', controllers.usersApi.currentUser);
+
 module.exports = router;

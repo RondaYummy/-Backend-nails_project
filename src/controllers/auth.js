@@ -26,7 +26,7 @@ const signIn = async (req, res) => {
 
   const user = await models.User.findOne({
     email,
-  }).exec();
+  }).select('+password').exec();
   if (!user) {
     res.status(401).json({
       message: 'User does not exist!',
@@ -35,11 +35,17 @@ const signIn = async (req, res) => {
   }
   const isValid = await bcrypt.compareSync(password, user.password);
 
+  user.password = null;
+
   if (isValid) {
     const updatedToken = await updateTokens(user._id);
     console.log('updatedToken', updatedToken);
+
     if (updatedToken) {
-      res.json(updatedToken);
+      res.json({
+        updatedToken,
+        user,
+      });
     }
   }
 };
