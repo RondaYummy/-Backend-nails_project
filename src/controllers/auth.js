@@ -27,22 +27,26 @@ const signIn = async (req, res) => {
   const user = await models.User.findOne({
     email,
   }).select('+password').exec();
+
   if (!user) {
     res.status(401).json({
-      message: 'User does not exist!',
+      message: 'AuthError',
     });
     return;
   }
   const isValid = await bcrypt.compareSync(password, user.password);
-
+  if (!isValid) {
+    res.status(401).json({
+      message: 'AuthError',
+    });
+    return;
+  }
   user.password = null;
 
   if (isValid) {
     const updatedToken = await updateTokens(user._id);
     console.log('updatedToken', updatedToken);
-    res.cookie('token', updatedToken, {
-      httpOnly: true,
-    });
+    res.cookie('token', updatedToken);
     if (updatedToken) {
       res.json({
         // updatedToken,
@@ -115,10 +119,17 @@ const signUp = async (req, res) => {
     const currentUser = await models.User.findOne({
       email,
     });
-
+    const currentUserPhone = await models.User.findOne({
+      phone,
+    });
+    if (currentUserPhone) {
+      return res.status(400).json({
+        errors: 'RegError',
+      });
+    }
     if (currentUser) {
       return res.status(400).json({
-        errors: 'A user with this name already exists. Use a different name.',
+        errors: 'RegError',
       });
     }
 

@@ -3,7 +3,6 @@ const { secret } = require('../../config/development.json').jwt;
 
 module.exports = (req, res) => {
   const authHeader = req.get('Authorization');
-
   if (!authHeader) {
     res.status(401).json({ message: 'Token not provided!!!' });
     return;
