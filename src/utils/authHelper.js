@@ -1,11 +1,15 @@
 const jwt = require('jsonwebtoken');
-const { v4: uuidv4 } = require('uuid');
+const {
+  v4: uuidv4,
+} = require('uuid');
 const {
   secret,
   tokens,
 } = require('../../config/development.json').jwt;
 
-const UserToken = require('../models/UserToken');
+const {
+  UserToken,
+} = require('../models');
 
 const generateAccesToken = (userId) => {
   const payload = {
@@ -37,9 +41,13 @@ const generateRefreshToken = () => {
   };
 };
 const replaceDbRefreshToken = async (tokenId, userId) => {
-  await UserToken.findOneAndRemove({ user: userId }).exec();
-  const gg = await UserToken.create({ tokenId, user: userId });
-  console.log('replaceDbRefreshToken', gg);
+  await UserToken.findOneAndRemove({
+    user: userId,
+  }).exec();
+  await UserToken.create({
+    tokenId,
+    user: userId,
+  });
 };
 
 module.exports = {
